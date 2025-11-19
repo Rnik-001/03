@@ -736,7 +736,7 @@
                 }
                 
                 const currentTime = new Date().getTime();
-                const oneHourInMs = 60 * 60 * 1000; // 1小时的毫秒数
+                const oneHourInMs = 20 * 60 * 1000; // 1小时的毫秒数
                 
                 // 如果距离上次显示已经超过1小时，则显示弹窗
                 return (currentTime - parseInt(lastPopupTime)) > oneHourInMs;
