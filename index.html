@@ -728,15 +728,29 @@
                 });
             });
             
-            // 页面加载后显示TG频道提示
-            setTimeout(() => {
+                    // 检查是否应该显示TG频道弹窗
+            function shouldShowTgPopup() {
+                const lastPopupTime = localStorage.getItem('lastTgPopupTime');
+                if (!lastPopupTime) {
+                    return true; // 从未显示过，需要显示
+                }
+                
+                const currentTime = new Date().getTime();
+                const oneHourInMs = 60 * 60 * 1000; // 1小时的毫秒数
+                
+                // 如果距离上次显示已经超过1小时，则显示弹窗
+                return (currentTime - parseInt(lastPopupTime)) > oneHourInMs;
+            }
+            
+            // 显示TG频道弹窗
+            function showTgPopup() {
                 Swal.fire({
                     title: '加入官方TG频道',
                     html: `
                     <div style="text-align:center;padding:0.8rem">
                         <h3 style="margin-bottom:0.8rem;color:#2c3e50">@iOSAWJ</h3>
-                        <p style="margin-bottom:1rem">获取最新配置和工具更新</p>
-                        <a href="https://t.me/iOSAWJ" target="_blank" style="display:inline-block;background:#0088cc;color:white;padding:0.6rem 1.2rem;border-radius:6px;text-decoration:none;font-weight:500;font-size:0.8rem">立即加入</a>
+                        <p style="margin-bottom:1rem">获取最新工具和更新</p>
+                        <button onclick="window.open('https://t.me/iOSAWJ', '_blank')" style="display:inline-block;background:#0088cc;color:white;padding:0.6rem 1.2rem;border-radius:6px;text-decoration:none;font-weight:500;font-size:0.8rem;border:none;cursor:pointer">立即加入</button>
                     </div>
                     `,
                     showCloseButton: true,
@@ -744,6 +758,16 @@
                     background: '#f8f9fa',
                     width: window.innerWidth > 768 ? 400 : '90%',
                 });
+                
+                // 更新最后显示时间
+                localStorage.setItem('lastTgPopupTime', new Date().getTime().toString());
+            }
+            
+            // 页面加载后检查是否需要显示TG频道提示
+            setTimeout(() => {
+                if (shouldShowTgPopup()) {
+                    showTgPopup();
+                }
             }, 1000);
         });
     </script>
